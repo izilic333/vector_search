@@ -1,0 +1,80 @@
+{% extends "administration/base.html" %}
+
+{% block content %}
+<div style="background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 20px; margin-bottom: 20px; border-radius: 5px;">
+    <h4 style="font-weight: 500;">Random article words to embeddings!</h4>
+    <p style="font-size: 16px; line-height: 1.6;">
+        <i class="fas fa-lightbulb" style="color: #ffc107; margin-right: 8px;"></i>
+        This feature enables you to effortlessly retrieve random words from your articles along with their corresponding 768-dimensional vectors.
+    </p>
+    <p style="font-size: 16px; line-height: 1.6;">
+        <i class="fas fa-copy" style="color: #17a2b8; margin-right: 8px;"></i>
+        This allows for the easy copying of these vectors, making it convenient to use them in searches if your aim is to search by embeddings.
+    </p>
+    <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;"></div>
+
+</div>
+
+<div class="flex-container" style="padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: auto; margin-top: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <h3 style="text-align: center;">Discover Random Article Words - which you can use for search</h3>
+    <p style="text-align: justify;">Fetch a random word from a randomly selected article and its associated 768-dimensional vector representing the article's content, stored in the Milvus vector database. Click the button below to explore.</p>
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="fetch-word-btn" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Fetch Random Word</button>
+    </div>
+    <div id="result-container" style="margin-top: 20px; background-color: #f9f9f9; padding: 20px; border-radius: 5px;">
+        <h4 style="margin-bottom: 10px;">Result:</h4>
+        <p id="random-word" style="font-weight: bold;">Random word will appear here.</p>
+        <label for="random-vector" style="margin-top: 10px; display: block;">Vector (click to copy):</label>
+        <textarea id="random-vector" rows="5" cols="50" readonly onclick="copyToClipboard()" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-family: monospace;">Vector will appear here.</textarea>
+    </div>
+</div>
+
+<script>
+document.getElementById('fetch-word-btn').addEventListener('click', fetchRandomWord);
+
+function fetchRandomWord() {
+    fetch("/administration/random_example_embeddings/")
+        .then(response => response.json())
+        .then(data => {
+            const randomWordElement = document.getElementById("random-word");
+            const randomVectorElement = document.getElementById("random-vector");
+            randomWordElement.textContent = "";
+            randomVectorElement.value = ""; // Prepare for string input
+
+            if (!data.word || !data.embedding) {
+                const errorMessage = data.message || "Unexpected error occurred. Please try again.";
+                showToast(errorMessage);
+            } else {
+                randomWordElement.textContent = "Random Word: " + data.word;
+                // Use JSON.stringify to display the array as a string that looks like an array
+                randomVectorElement.value = JSON.stringify(data.embedding, null, 2);
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching random word and vector:", error);
+            showToast("Failed to fetch random word and vector. Please check the console for more details.");
+        });
+}
+
+function copyToClipboard() {
+    const copyText = document.getElementById("random-vector");
+    copyText.select();
+    document.execCommand("copy");
+    showToast("Vector copied to clipboard");
+}
+
+function showToast(message) {
+    const container = document.getElementById("toast-container");
+    const toast = document.createElement("div");
+    toast.textContent = message;
+    toast.style.cssText = "background-color: #333; color: white; padding: 10px; margin-bottom: 5px; border-radius: 5px; opacity: 0; transition: opacity 0.5s;";
+
+    container.appendChild(toast);
+    setTimeout(() => toast.style.opacity = 1, 100); // Fade in
+    setTimeout(() => {
+        toast.style.opacity = 0; // Fade out
+        toast.addEventListener('transitionend', () => toast.remove());
+    }, 3000); // Message duration
+}
+</script>
+{% endblock %}

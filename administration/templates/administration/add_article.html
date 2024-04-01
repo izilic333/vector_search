@@ -1,0 +1,29 @@
+{% extends "./base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h3>Add Articles</h3>
+<br>
+<form method="post" novalidate>
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form|crispy }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<br>
+<h3>Current Articles</h3>
+<table id="articlesTable" class="table">
+    {% include "./article_list.html" with articles=articles %}
+</table>
+
+{% endblock %}
+{% block javascript %}
+<script>
+
+$(document).ready(function () {
+    $('#articlesTable').DataTable();
+});
+</script>
+{% endblock %}

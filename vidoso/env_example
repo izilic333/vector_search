@@ -1,0 +1,13 @@
+DEBUG=False
+DJANGO_LOG_LEVEL=INFO
+SECRET_KEY=django-insecure--hl9mpi0ejj0f&gazaqw8vfs&4=-%53(8_-on@f-bo!7x!u8wn
+
+ALLOWED_HOSTS=localhost,127.0.0.1,::1
+DATABASE_URL=psql://app:app@postgres:5432/app?conn_max_age=60&conn_health_checks=True
+CACHE_URL=locmemcache://test-cache
+BROKER_URL=redis://redis:6379/0
+REDIS_HOST=redis
+REDIS_PORT=6379
+MILVUS_HOST=milvus-standalone
+MILVUS_PORT=19530
+MILVUS_COLLECTION_NAME=article_embeddings

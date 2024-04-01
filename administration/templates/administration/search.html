@@ -1,0 +1,77 @@
+{% extends "administration/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Search for Article Chunks</h3>
+    <p>Enter a text query to search for similar chunks in the database. The search utilizes BERT 768-dimensional embeddings for semantic search.</p>
+
+    <form id="searchForm" action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" id="query" name="query" class="form-control" placeholder="Enter search query..." required>
+        </div>
+        <div class="form-group">
+            <label for="topN">Results to display:</label>
+            <select id="topN" name="topN" class="form-control" style="width: 70px;">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% if error %}
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% endif %}
+
+    {% if results %}
+        <div class="mt-5">
+            <h4>Search Results</h4>
+            <table id="resultsTable" class="display">
+                <thead>
+                    <tr>
+                        <th>Chunk ID</th>
+                        <th>Similarity</th>
+                        <th>Distance</th>
+                        <th>Article Name</th>
+                        <th>Article URL</th>
+                        <th>Text</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                        <tr>
+                            <td>{{ result.chunk_id }}</td>
+                            <td>{{ result.similarity|floatformat:2 }}</td>
+                            <td>{{ result.distance|floatformat:2 }}</td>
+                            <td>{{ result.article_title }}</td>
+                            <td><a href="{{ result.article_url }}" target="_blank">View Article</a></td>
+                            <td>{{ result.text }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        $('#resultsTable').DataTable({
+            scrollX: true
+        });
+    });
+</script>
+{% endblock %}

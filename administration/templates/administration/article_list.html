@@ -1,0 +1,74 @@
+<table id="articlesTable" class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>URL</th>
+            <th>Status</th>
+            <th>Chunks</th>
+            <th>Progress</th>
+            <th>Processing info</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for article in articles %}
+            <tr id="articleRow_{{ article.id }}">
+                <td>{{ article.title }}</td>
+                <td><a href="{{ article.url }}">{{ article.url }}</a></td>
+                <td>{{ article.get_status_display }}</td>
+                <td>{{ article.chunks.count }}</td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar {% if article.status == 'processed' %}bg-success{% endif %}" role="progressbar" style="width: {{ article.progress }}%;" aria-valuenow="{{ article.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </td>
+                <td>{{ article.processing_info }}</td>
+                <td>
+                    <a href="{% url 'edit_article' article_id=article.id %}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{% url 'delete_article' pk=article.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const wsStart = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const articleSocket = new WebSocket(wsStart + window.location.host + '/ws/administration/');
+
+        articleSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            if (data.message.action === 'update') {
+                // Extract the updated article data
+                const updatedArticle = data.message.article;
+                if (updatedArticle) { // Add this line
+                    // Find the corresponding table row by its ID
+                    const tableRow = document.getElementById('articleRow_' + updatedArticle.id);
+                    if (tableRow) {
+                        // Update the table cell content with the new values
+                        tableRow.cells[0].innerText = updatedArticle.title;
+                        tableRow.cells[1].innerHTML = '<a href="' + updatedArticle.url + '">' + updatedArticle.url + '</a>';
+                        tableRow.cells[2].innerText = updatedArticle.status;
+                        tableRow.cells[3].innerText = updatedArticle.num_chunks;
+                        const progressBar = tableRow.querySelector('.progress-bar');
+                        progressBar.style.width = updatedArticle.progress + '%';
+                        tableRow.cells[5].innerText = updatedArticle.processing_info;
+                        progressBar.setAttribute('aria-valuenow', updatedArticle.progress);
+                        if (updatedArticle.status === 'processed') {
+                            progressBar.classList.add('bg-success');
+                        } else {
+                            progressBar.classList.remove('bg-success');
+                        }
+                    }
+                } else {
+                    console.error('Received update message without article data');
+                }
+            }
+        };
+
+        articleSocket.onclose = function (e) {
+            console.error('Article socket closed unexpectedly');
+        };
+    });
+</script>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+{% load i18n %}
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
+
+    <title>{% block title %}Vidoso{% endblock title %}</title>
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+
+<body>
+
+    {% block navbar %}
+        {% include  './navbar.html' %}
+    {% endblock %}
+    <div class="container mt-5 pt-5 mb-5">
+        {% block content %}
+        <!-- Content overridden in child templates -->
+        {% endblock content %}
+    </div>
+
+    <!-- jQuery library (Necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Bundle with Popper.js (if you're using Bootstrap 5, you might not need the standalone Bootstrap JS above) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block javascript %}
+    {% endblock javascript %}
+</body>
+</html>

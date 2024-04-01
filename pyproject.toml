@@ -1,0 +1,310 @@
+[tool.poetry]
+name = "vector-search-hub"
+version = "0.1.0"
+description = ""
+authors = ["Ivan Zilic <ivan.zilic9@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.2"
+djangorestframework-simplejwt = "^5.3.1"
+djangorestframework = "^3.14.0"
+psycopg2 = "^2.9.9"
+faker = "^23.3.0"
+ruff = "^0.3.0"
+coverage = "^7.4.3"
+celery = "^5.3.6"
+django-filter = "^23.5"
+ipython = "^8.22.1"
+requests = "^2.31.0"
+django-cors-headers = "^4.3.1"
+django-environ = "^0.11.2"
+django-crispy-forms = "^2.1"
+crispy-bootstrap5 = "^2024.2"
+transformers = "^4.38.2"
+nltk = "^3.8.1"
+beautifulsoup4 = "^4.12.3"
+pymilvus = "^2.3.6"
+torch = "^2.2.1"
+torchvision = "^0.17.1"
+torchaudio = "^2.2.1"
+django-shell = "^1.0.2"
+django-celery-results = "^2.5.1"
+redis = "^5.0.2"
+kombu = "^5.3.5"
+channels = "^4.0.0"
+channels-redis = "^4.2.0"
+uvicorn = "^0.28.0"
+websockets = "^12.0"
+factory-boy = "^3.3.0"
+
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+types-mock = "5.*"
+types-python-dateutil = "2.*"
+types-requests = "2.*"
+mypy = "1.8.*"
+ipdb = ">=0.13,<1.0"
+pylint = "3.*"
+pylint-django = "2.5.*"
+pre-commit = "3.*"
+ruff = "^0.3.0"
+polib = "^1.1.1"
+types-polib = "^1.1.12.1"
+djlint = "^1.34.1"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+# Fake HTTP Response in test
+httpretty = "1.1.*"
+# Helpful for parallel tests when there are exceptions
+tblib = "3.0.*"
+coverage = "7.*"
+# Even though it's not used anywhere, it's handy to have this for performance tests while developing
+codetiming = "*"
+rapidfuzz = "^3.0.0"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+mkdocs-material = "9.5.11"
+mkdocs = "1.5.3"
+mkdocstrings-python = "1.8.0"
+mkdocstrings = "0.24.0"
+mkdocs-gen-files = "^0.5.0"
+
+[tool.poetry.group.prod]
+optional = true
+
+[tool.poetry.group.prod.dependencies]
+uwsgi = "^2.0.21"
+uwsgitop = "^0.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Docs: https://beta.ruff.rs/docs/
+# Exclude a variety of commonly ignored directories.
+exclude = [
+  ".git",
+  ".mypy_cache",
+  ".pre-commit-cache",
+  ".ruff_cache",
+  ".tox",
+  ".venv",
+  "venv",
+  "docs",
+  "__pycache",
+  "**/migrations/*",
+]
+
+line-length = 120
+# Assume Python 3.11.
+target-version = "py311"
+
+[tool.ruff.format]
+quote-style = "preserve"
+
+[tool.ruff.lint]
+# Rules: https://beta.ruff.rs/docs/rules/
+select = [
+  "F",
+  "FA",
+  "E",
+  "B",
+  "C",
+  "C4",
+  "C90",
+  "I",
+  "N",
+  "EXE",
+  "ISC",
+  "ICN",
+  "INP",
+  "INT",
+  "PIE",
+  "SIM",
+  "W",
+  "T20",
+  "UP",
+  "T10",
+  "G",
+  "DJ",
+  "C90",
+  "TID252",
+  "RUF100",
+  "TRY300",
+  "TRY301",
+  "TRY400",
+  "FLY",
+  "UP",
+  "S",
+  "BLE",
+  "DTZ",
+  "PYI",
+  "RSE",
+  "RET",
+  "PTH",
+  "PL",
+  "PERF",
+  "RUF",
+]
+# Later on might be useful C/C90 (Compexity), ERA (Found commented-out code), FBT
+ignore = [
+  # ISC001: Ignored because it's conflicting with the formatter
+  "ISC001",
+  "B008",
+  "SIM102",
+  "S101",
+  "RUF012",
+  "PLR0913",
+  "S311",
+  "PLR2004",
+  "DTZ001",
+  "DTZ005",
+  "DTZ007",
+  "N806",
+  # TODO REMOVE ASAP IN NEXT MR
+  "PLW0602",
+  "PLW0603",
+  "PLR0912",
+  "PLR0911",
+  "N815",
+  "N802",
+  "S113",
+  "TRY301",
+  "N818",
+  "S603",
+  "S607",
+  "BLE001",
+]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = [
+  "F",
+  "FA",
+  "E",
+  "B",
+  "C",
+  "C4",
+  "C90",
+  "I",
+  "N",
+  "EXE",
+  "ISC",
+  "ICN",
+  "INP",
+  "INT",
+  "PIE",
+  "SIM",
+  "W",
+  "T20",
+  "UP",
+  "T10",
+  "G",
+  "DJ",
+  "C90",
+  "TID252",
+  "RUF100",
+  "TRY300",
+  "TRY301",
+  "TRY400",
+  "FLY",
+  "UP",
+  "S",
+  "BLE",
+  "DTZ",
+  "ISC",
+  "PYI",
+  "RSE",
+  "RET",
+  "PTH",
+  "PL",
+  "PERF",
+  "RUF",
+]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 15
+
+[tool.ruff.lint.per-file-ignores]
+"tests_*.py" = ["E501"]
+"**/management/commands/*.py" = ["T20"]
+"simulation/**" = ["T20"]
+"debtor_management_system/tests/general.py" = ["T201"]
+"debtor_management_system/tests/**" = ["N802", "N801", "N999"]
+"post_migration/post_migrations/*.py" = ["T201", "N999"]
+"core/tests/case_runner.py" = ["T201"]
+"__init__.py" = ["TID252"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+# Disallow all relative imports.
+ban-relative-imports = "all"
+
+[tool.coverage.run]
+omit = [
+  "*/migrations/*",
+  "*/post_migrations/*",
+  "*/tests/*",
+  "*/tests.py",
+  "*test_*",
+  "*/wsgi.py",
+  "*/asgi.py",
+  "*/factories/*",
+  "manage.py",
+  "*site-packages*",
+  "*/management/commands/*",
+]
+source = ["."]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
+  "def __repr__",
+  "def __str__",
+]
+omit = [
+  "*/migrations/*",
+  "*/post_migrations/*",
+  "*/tests/*",
+  "*/tests.py",
+  "*test_*",
+  "*/wsgi.py",
+  "*/asgi.py",
+  "*/factories/*",
+  "manage.py",
+  "*site-packages*",
+  "*/management/commands/*",
+]
+
+[tool.mypy]
+ignore_missing_imports = true
+namespace_packages = true
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+ignore_errors = true
+
+[tool.djlint]
+blank_line_after_tag = "load,extends,include"
+extend_exclude = "generated_docs"
+format_css = false
+profile = "django"
+use_gitignore = true
+ignore = "H025,H021"
