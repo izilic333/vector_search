@@ -68,6 +68,11 @@ To run in detached mode
 ```bash
 docker-compose up -d
 ```
+Open:
+
+```bash
+http://localhost:8000/
+```
 
 To view logs/output
 
