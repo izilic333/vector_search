@@ -110,3 +110,17 @@ Install [pre-commit][https://pre-commit.com] on your machine and run
 ```bash
 pre-commit install
 ```
+
+## Add articles 
+
+![Add articcle](/images/add_article.png "Add your articles")
+
+
+## Search articles in vector DB
+
+![Search article](/images/search.png "Search vector db")
+
+## Fetch random embeddings from your articles
+- You can use then this embeddings as search query
+
+![Example embeddings](/images/get_example_vector.png "Example embeddings from your articles")
