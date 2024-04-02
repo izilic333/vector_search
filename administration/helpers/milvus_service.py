@@ -5,7 +5,8 @@ import re
 import numpy as np
 import torch
 from django.conf import settings
-from pymilvus import Collection, CollectionSchema, DataType, FieldSchema, connections, exceptions, utility
+from pymilvus import (Collection, CollectionSchema, DataType, FieldSchema,
+                      connections, exceptions, utility)
 from transformers import BertModel, BertTokenizer
 
 from administration.api.enums import ProcessingMessages
@@ -113,24 +114,24 @@ class MilvusService:
 
         return collection
 
-    def fetch_random_vectors(self, limit=1):
+    def fetch_random_vectors(self):
         article_random_text = ArticleChunk.objects.order_by('?').values_list('text', flat=True).first()
-        if not article_random_text:
-            return {
-                "embedding": None,
-                "word": None,
-                "message": ProcessingMessages.MILVUS_EMPTY_CHUNKS.value,
-            }
-        words = re.findall(r'\b[a-zA-Z]{2,}\b', article_random_text)
-        if not words:
-            return {
-                "embedding": None,
-                "word": None,
-                "message": ProcessingMessages.MILVUS_NO_VALID_WORDS_FOUND.value,
-            }
-        random_word = random.choice(words)
-        return {
-            "embedding": self.generate_embeddings_from_text(random_word),
-            "word": random_word,
+        results = {
+            "embedding": [],
+            "word": "",
             "message": ProcessingMessages.MILVUS_SUCCESSFULLY_FETCH_RANDOM_WORD_AND_CORRESPONDING_VECTOR.value,
         }
+
+        if not article_random_text:
+            results["message"] == ProcessingMessages.MILVUS_EMPTY_CHUNKS.value
+            return results
+        
+        words = re.findall(r'\b[a-zA-Z]{2,}\b', article_random_text)
+        if not words:
+            results["message"] == ProcessingMessages.MILVUS_NO_VALID_WORDS_FOUND.value
+            return results
+            
+        random_word = random.choice(words)
+        results["embedding"] = self.generate_embeddings_from_text(random_word)
+        results["word"] = random_word
+        return results

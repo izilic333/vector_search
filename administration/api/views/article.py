@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, TemplateView, UpdateView, View
+from django.views.generic import (CreateView, DeleteView, TemplateView,
+                                  UpdateView, View)
 from pymilvus import Collection, connections, utility
 
 from administration.forms import ArticleForm
@@ -62,5 +63,5 @@ class RandomVectorsView(View):
     milvus_service = MilvusService(collection_name="article_embeddings")
 
     def get(self, request, *args, **kwargs):
-        random_vectors = self.milvus_service.fetch_random_vectors(limit=1)
+        random_vectors = self.milvus_service.fetch_random_vectors()
         return JsonResponse(random_vectors)
