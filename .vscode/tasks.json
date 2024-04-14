@@ -1,0 +1,118 @@
+{
+    "version": "2.0.0",
+    "problemMatcher": [],
+    "presentation": {
+        "reveal": "always",
+        "panel": "new"
+    },
+    "type": "shell",
+    "tasks": [
+        {
+            "label": "Build",
+            "dependsOn": [
+                "Django: Webserver (ASGI)"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "Test",
+            "dependsOn": [
+                "Django: Run tests"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Django: Webserver (ASGI)",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "-m",
+                "uvicorn",
+                "vidoso.asgi:application",
+                "--reload",
+                "--host", "0.0.0.0",
+                "--port", "8000"
+            ],
+            "group": "none"
+        },
+
+        {
+            "label": "Django: Shell",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "manage.py",
+                "shell_plus"
+            ],
+            "group": "none"
+        },
+        {
+            "label": "Django: Make migrations",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "manage.py",
+                "makemigrations"
+            ],
+            "group": "none"
+        },
+        {
+            "label": "Django: Migrate",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "manage.py",
+                "migrate"
+            ],
+            "group": "none"
+        },
+        {
+            "label": "Django: Run tests",
+            "command": "${config:python.pythonPath}",
+            "args": [
+                "manage.py",
+                "test",
+                "--no-input",
+            ],
+            "group": "test"
+        },
+        {
+            "label": "Django: Renew/Lock requirements",
+            "command": "poetry",
+            "args": [
+                "lock",
+                "--no-update"
+            ],
+            "group": "none"
+        },
+        {
+            "label": "Django: install requirements",
+            "command": "poetry",
+            "args": [
+                "install",
+                "--with",
+                "dev,test,docs"
+            ],
+            "group": "none"
+        },
+        {
+            "label": "Django: Launch Celery worker",
+            "command": "/home/app/venv/bin/celery",
+            "args": [
+                "-A",
+                "vidoso",
+                "worker",
+                "-l",
+                "info",
+                "-P",
+                "threads"
+            ],
+            "group": "none"
+        },
+    ]
+}

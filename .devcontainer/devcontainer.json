@@ -1,0 +1,230 @@
+{
+    // name of the devcontainer
+    "name": "Vidoso",
+    // define the docker compose file to use for the devcontainer
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "./docker-compose.yml"
+    ],
+    // define which services from the compose file to start and stop
+    "runServices": [
+        "minio",
+        "milvus-standalone",
+        "postgres",
+        "memcached",
+        "django",
+        "celery_worker",
+    ],
+    // define the docker-compose service to use for the dev container
+    "service": "django",
+    // define the workspace folder our app is located in
+    "workspaceFolder": "/app",
+    // set the remote user to connect as
+    "remoteUser": "app",
+    // configure vscode
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+            "settings": {
+                "task.allowAutomaticTasks": "on",
+                // define a terminal profile
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash"
+                    }
+                },
+                // set defined terminal profile active
+                "terminal.integrated.defaultProfile.linux": "bash",
+                // language specific editor settings
+                "python.analysis.autoImportCompletions": true,
+                "[python]": {
+                    "editor.rulers": [
+                        88,
+                        120
+                    ],
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": "always"
+                    },
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true
+                },
+                "[sql]": {
+                    "editor.formatOnSave": false
+                },
+                // clear formatter to make sure ruff will be used
+                "python.formatting.provider": "none",
+                "pylint.args": [
+                    "--load-plugins",
+                    "pylint_django"
+                ],
+                "pylint.path": [
+                    "/home/app/venv/bin/pylint"
+                ],
+                // don't activate the virtual environment every time as we're using the env binary
+                "python.terminal.activateEnvironment": false,
+                "python.terminal.activateEnvInCurrentTerminal": true,
+                // python environment
+                "python.pythonPath": "/home/app/venv/bin/python",
+                "python.defaultInterpreterPath": "/home/app/venv/bin/python",
+                // used for autocomplete etc
+                "python.languageServer": "Pylance",
+                "ruff.path": [
+                    "/home/app/venv/bin/ruff"
+                ],
+                "ruff.lint.args": [
+                    "--config",
+                    "/app/pyproject.toml"
+                ],
+                "ruff.interpreter": [
+                    "/home/app/venv/bin/python"
+                ],
+                "ruff.showNotifications": "onError",
+                "ruff.logLevel": "error",
+                // file formatting options
+                "files.trimTrailingWhitespace": true,
+                "files.insertFinalNewline": true,
+                "files.associations": {
+                    "**/templates/*/*.html": "django-html",
+                    "**/templates/*": "django-txt",
+                    "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+                    "**/.env.local.dev": "properties",
+                    "**/.env.test": "properties",
+                    "**/.env.local": "properties"
+                },
+                "emmet.includeLanguages": {
+                    "django-html": "html"
+                },
+                "beautify.language": {
+                    "html": [
+                        "htm",
+                        "html",
+                        "django-html"
+                    ]
+                },
+                "[django-html]": {
+                    "editor.defaultFormatter": "monosans.djlint"
+                },
+                "djlint.useVenv": false,
+                "djlint.pythonPath": "/home/app/venv/bin/python",
+                "djlint.configuration": "/app/pyproject.toml",
+                // files to exclude from all checks
+                "files.exclude": {
+                    "**/*.pyc": true,
+                    "**/.git": false,
+                    "**/migrations/*": false,
+                    "**/.ipython": true,
+                    "**/.mypy_cache": true,
+                    "**/.pre-commit-cache": true,
+                    "**/.ruff_cache": true,
+                    "**/.bash_aliases": true,
+                    "**/__pycache__": true
+                },
+                "python.analysis.extraPaths": [
+                    "../home/app/venv/lib/python3.11/site-packages/"
+                ],
+                "python.analysis.useImportHeuristic": true,
+                "python.analysis.autoSearchPaths": true,
+                "indentRainbow.ignoreErrorLanguages": [
+                    "python",
+                    "markdown"
+                ],
+                "python.djangoTestRunner.flags": "--keepdb"
+            },
+            // list all extensions that should be installed when the container is created
+            "extensions": [
+                // ---------------------------------------
+                // PYTHON
+                // ---------------------------------------
+                // Python extension for Visual Studio Code
+                // https://marketplace.visualstudio.com/items?itemName=ms-python.python
+                "ms-python.python",
+                // Pylance - A performant, feature-rich language server for Python in VS Code
+                // https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance
+                "ms-python.vscode-pylance",
+                // Python docstring generator
+                // https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring
+                "njpwerner.autodocstring",
+                // Proper indentation for Python
+                // https://marketplace.visualstudio.com/items?itemName=KevinRose.vsc-python-indent
+                "KevinRose.vsc-python-indent",
+                // Visually highlight indentation depth
+                // https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow
+                "oderwat.indent-rainbow",
+                // Code comment highlights
+                // https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
+                "aaron-bond.better-comments",
+                // Visual Studio IntelliCode - AI-assisted development
+                // https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode
+                "visualstudioexptteam.vscodeintellicode",
+                // ---------------------------------------
+                // SQL
+                // ---------------------------------------
+                // SQLTools - database explorer
+                // https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools
+                "mtxr.sqltools",
+                // PostgreSQL driver for SQLTools
+                // https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools-driver-pg
+                "mtxr.sqltools-driver-pg",
+                // SQLite driver for SQLTools
+                // https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools-driver-sqlite
+                "mtxr.sqltools-driver-sqlite",
+                // ---------------------------------------
+                // GIT
+                // ---------------------------------------
+                // View git log, file history, compare branches or commits
+                // https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory
+                "donjayamanne.githistory",
+                // Supercharge the Git capabilities built into Visual Studio Code
+                // https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens
+                "eamodio.gitlens",
+                // ---------------------------------------
+                // FILE TYPE SUPPORT
+                // ---------------------------------------
+                // Support for dotenv file syntax
+                // https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv
+                "mikestead.dotenv",
+                // Syntax highlighting for .po files
+                // https://marketplace.visualstudio.com/items?itemName=mrorz.language-gettext
+                "mrorz.language-gettext",
+                // Beautify code in place for VS Code
+                // https://marketplace.visualstudio.com/items?itemName=HookyQR.beautify
+                "HookyQR.beautify",
+                // ---------------------------------------
+                // DJANGO
+                // ---------------------------------------
+                // Django template support
+                // https://marketplace.visualstudio.com/items?itemName=batisteo.vscode-django
+                "batisteo.vscode-django",
+                // Django test runner
+                // https://marketplace.visualstudio.com/items?itemName=Pachwenko.django-test-runner
+                "Pachwenko.django-test-runner",
+                // ---------------------------------------
+                // Spellchecker
+                // ---------------------------------------
+                // https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker
+                "streetsidesoftware.code-spell-checker",
+                // ---------------------------------------
+                // TOML Syntax highlight
+                // ---------------------------------------
+                // https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml
+                "tamasfe.even-better-toml",
+                // ---------------------------------------
+                // GitHub Copilot
+                // https://marketplace.visualstudio.com/items?itemName=GitHub.copilot
+                "GitHub.copilot",
+                // ---------------------------------------
+                // Ruff extenstion
+                // https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff
+                "charliermarsh.ruff",
+                // ---------------------------------------
+                // pylint extension
+                // https://marketplace.visualstudio.com/items?itemName=ms-python.pylint
+                "ms-python.pylint",
+                // ---------------------------------------
+                // Djlint
+                // https://marketplace.visualstudio.com/items?itemName=monosans.djlint
+                "monosans.djlint"
+            ]
+        }
+    }
+}

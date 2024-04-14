@@ -1,0 +1,69 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python: Uvicorn",
+            "type": "python",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "vidoso.asgi:application",
+                "--reload",
+                "--host", "0.0.0.0",
+                "--port", "8000"
+            ],
+            "django": true,
+            "jinja": true
+        },
+
+        {
+            "name": "Python: Django Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "test",
+                "--failfast",
+            ],
+            "django": true
+        },
+        {
+            "name": "Python: Django Tests/TAG debug",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "test",
+                "--tag",
+                "debug",
+            ],
+            "django": true
+        },
+        {
+            "name": "Python: Django Celery worker",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/app/venv/bin/celery",
+            "args": [
+                "-A",
+                "vidoso",
+                "worker",
+                "-l",
+                "info",
+                "-P",
+                "threads"
+            ]
+        },
+        {
+            "name": "Python: Django shell",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "shell_plus",
+            ],
+            "django": true
+        },
+    ]
+}

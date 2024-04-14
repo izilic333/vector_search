@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  django:
+    entrypoint: /bin/sh
+    command: -c "sleep infinity"
+    build:
+      context: .
+
+    volumes:
+      - core_vscode_extensions:/home/app/.vscode-server/extensions
+
+volumes:
+  core_vscode_extensions:

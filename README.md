@@ -85,6 +85,17 @@ To view logs only for specific service, e.g django service
 docker-compose logs -f django
 ```
 
+To run tests
+
+```bash
+docker-compose run --rm django poetry run python manage.py test
+```
+
+Django migrate (but this would be done automatically, check start_app.sh)
+
+```bash
+docker-compose run --rm django migrate
+```
 
 
 ## ASGI Server
