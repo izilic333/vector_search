@@ -15,6 +15,7 @@ class DropMilvusCollectionView(View):
     def truncate_tables(self, table_names: list) -> None:
         with connection.cursor() as cursor:
             for table_name in table_names:
+                cursor.execute('COMMIT;')
                 cursor.execute(f'TRUNCATE TABLE "{table_name}" CASCADE;')
 
     def get(self, request, *args, **kwargs):
