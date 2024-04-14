@@ -1,0 +1,79 @@
+# Make sure pre-commit uses the same python version as we do
+default_language_version:
+  # default language version for each language
+  python: python3.12
+
+repos:
+  # Common builtin pre-commit hooks
+  # See https://pre-commit.com/hooks.html for more hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # simply checks whether the files parse as valid python.
+      - id: check-ast
+      # checks for files that would conflict in case-insensitive filesystem.
+      - id: check-case-conflict
+      # checks for files that contain merge conflict strings.
+      - id: check-merge-conflict
+      # checks for debugger imports and py37+ `breakpoint()` calls in python source.
+      - id: debug-statements
+      # ensures that a file is either empty, or ends with one newline.
+      - id: end-of-file-fixer
+      # trims trailing whitespace.
+      - id: trailing-whitespace
+      # sort requirements.in
+      - id: file-contents-sorter
+        files: requirements.in
+        args: [--ignore-case]
+
+  # Bandit is a tool designed to find common security issues in Python code. To do this Bandit processes each file, builds an AST from it, and runs appropriate plugins against the AST nodes. Once Bandit has finished scanning all the files it generates a report.
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.8
+    hooks:
+      - id: bandit
+        args: ["-iii", "-ll"]
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    # Ruff version.
+    rev: "v0.3.3"
+    hooks:
+      # Run the linter.
+      - id: ruff
+        args: [--fix]
+      # Run the formatter.
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: "v1.9.0"
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          [
+            types-mock==5.1.*,
+            types-requests==2.31.*,
+            types-python-dateutil==2.8.*,
+          ]
+
+  # Make sure we use new features of python and avoid old deprecated practices
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.1
+    hooks:
+      - id: pyupgrade
+        args: ["--py3-plus", "--py311-plus"]
+
+  # Similar to pyupgrade but fixes Django deprecation and new syntax
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: "1.16.0"
+    hooks:
+      - id: django-upgrade
+        args: [--target-version, "5.0"]
+
+  - repo: https://github.com/mondeja/pre-commit-po-hooks
+    rev: v1.7.3
+    hooks:
+      - id: obsolete-messages
+      - id: untranslated-messages
+      - id: fuzzy-messages
+      - id: remove-django-translators
+      - id: max-lines
+        args: ["20000"]
